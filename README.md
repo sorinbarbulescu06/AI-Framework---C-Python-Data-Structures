@@ -40,8 +40,9 @@ There is no need for normalization of data, this code does that in the backgroun
 
 
 !!!IMPORTANT!!!
-This program normalizes data using the input and output max and min / field
+-This program normalizes data using the input and output max and min / field
 so if the training dataset does not contain all the possible cases then the final model cannot "predict" what it didn't saw(or at least it cant precisely predict it)
+-If you want a classification method, the all_output_list should contain only lists of 1 element that resemble the "winning" case, you must also put all posibile scenarios in the output file so that the program can learn all the possible scenarios
 
 Functionality:
 The programs works by making 32 different templates of neural networks randomly generated, as well as for well known types of matrices : funnel, cillinder, barrell and wall.
