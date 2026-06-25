@@ -38,12 +38,31 @@ J-th test
 
 There is no need for normalization of data, this code does that in the background
 
+Functionality:
 The programs works by making 32 different templates of neural networks randomly generated, as well as for well known types of matrices : funnel, cillinder, barrell and wall.
 
 It trains, tests and scores them by how well they've done. Then the least intelligent half gets destroyed and the rest get further more educated
 This process repeats until just one remains on ground and a file is made in the directory of the program with the brute data of its model
 
-If a model was already trained for an application, you SHOULD NOT use the train function, but the get function, that calculates using the nerual network that was just already formed.
+If a model was already trained for an application, you SHOULD NOT use the train function, but the get function, that calculates using the neural network that was just already formed.
+
+Memory usage:
+all of the 32 templates have a float pointer that memorieses all the weights and biases that each neural network has.
+
+Aproximation of maximum memory occupied for one weight matrix:
+
+(8input_number(25input_number + 4 + output_number) + output_number) * 4bytes
+
+with the restriction that this ecuation cannot fizically go over 3.8MB and in total(32 templates) cannot go over 123MB
+
+So for an example of a problem that has 10 inputs and 10 outputs, all the weight and biases matrices only ocupy nearly 3MB and the matrix for training that has 100.000 tests consisting 10 inputs & 10 outputs / tests ocupy nearly 7.5MB
+so in total python gestion a maximum of 10.5MB
+
+C on the other half only gestions nearly 2.5 KB on the heap, only storing a matrix for the calculated values and error for every neuron
+
++- the rest of the data stored this code can succsessfuly run on 20MB of free data
+
+
 
 
 
