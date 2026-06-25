@@ -6,11 +6,14 @@ import logic
 def train(input_data, output_data, model_type):
     #setting global values
     config.INPUT_NO = len(input_data[0])
-    config.OUTPUT_NO = len(output_data[0])
     config.TESTS_NO = len(input_data)
+    if model_type == "r":
+        config.OUTPUT_NO = len(output_data[0])
+    else:
+        logic.get_posib(output_data)
     config.EXAM_NO = int(0.8 * config.TESTS_NO)
 
-    logic.normalize(input_data, output_data)
+    logic.normalize(input_data, output_data, model_type)
 
     #transform from objects into pointers input and output data
     flat_input = [valoare for rand in input_data for valoare in rand]
@@ -43,7 +46,7 @@ def train(input_data, output_data, model_type):
             existing_adn.append(model.height)
             presets.append(model)
     
-    #first half out - !10 epochs!
+    #first training - !10 epochs!
     for model in presets:
         point_height = (ctypes.c_int * model.depth)(*model.height)
         train_lib.train_and_test(config.INPUT_NO, config.OUTPUT_NO, model.depth, 10, model.ponders, flat_input, flat_output, config.TESTS_NO, point_height, model_type)

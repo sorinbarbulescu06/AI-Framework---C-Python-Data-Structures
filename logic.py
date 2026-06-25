@@ -87,7 +87,7 @@ def hardcode(presets, existing_adn):
     existing_adn.append(model.height)
     presets.append(model)
 
-def normalize(input_data, output_data):
+def normalize(input_data, output_data, model_type):
     for i in range(config.INPUT_NO):
         minimum = input_data[0][i]
         maximum = input_data[0][i]
@@ -107,22 +107,27 @@ def normalize(input_data, output_data):
             else:
                 input_data[j][i] = (input_data[j][i] - minimum) / delta
 
-    for i in range(config.OUTPUT_NO):
-        minimum = output_data[0][i]
-        maximum = output_data[0][i]
-        for j in range(config.TESTS_NO):
-            if minimum > output_data[j][i]:
-                minimum = output_data[j][i]
-            if maximum < output_data[j][i]:
-                maximum = output_data[j][i]
-        config.OUTPUT_MAX.append(maximum)
-        config.OUTPUT_MIN.append(minimum)
-        delta = maximum - minimum
-        for j in range(config.TESTS_NO):
-            if delta == 0:
-                output_data[j][i] = 0
-            else:
-                output_data[j][i] = (output_data[j][i] - minimum) / delta
+    if model_type == "r":
+        for i in range(config.OUTPUT_NO):
+            minimum = output_data[0][i]
+            maximum = output_data[0][i]
+            for j in range(config.TESTS_NO):
+                if minimum > output_data[j][i]:
+                    minimum = output_data[j][i]
+                if maximum < output_data[j][i]:
+                    maximum = output_data[j][i]
+            config.OUTPUT_MAX.append(maximum)
+            config.OUTPUT_MIN.append(minimum)
+            delta = maximum - minimum
+            for j in range(config.TESTS_NO):
+                if delta == 0:
+                    output_data[j][i] = 0
+                else:
+                    output_data[j][i] = (output_data[j][i] - minimum) / delta
             
-    
-    
+def get_posib(output_data):
+    maxim = output_data[0][0]
+    for i in range(config.TESTS_NO):
+        if maxim < output_data[i][0]:
+            maxim = output_data[i][0]
+    config.OUTPUT_NO = int(maxim) + 1
