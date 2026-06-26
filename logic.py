@@ -19,7 +19,7 @@ class preset:
     def init_ponders(self):
         initial_values = []
         for i in range(self.space):
-            num = random.uniform(-1.0, 1.0)
+            num = random.uniform(config.W_INIT[0], config.W_INIT[1])
             initial_values.append(num)
         type_arr_c = ctypes.c_float * self.space
         self.ponders = type_arr_c(*initial_values)
@@ -54,7 +54,7 @@ def hardcode(presets, existing_adn):
         num = 2
     else:
         num= int(config.INPUT_NO / 2)
-    model.height = [config.INPUT_NO * 2, config.INPUT_NO, num]
+    model.height = [int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 3]), config.INPUT_NO, num]
     model.set_space()
     model.init_ponders()
     existing_adn.append(model.height)
@@ -63,7 +63,7 @@ def hardcode(presets, existing_adn):
     #cilinder   
     model = preset()
     model.depth = 3
-    model.height = [config.INPUT_NO * 2, config.INPUT_NO * 2, config.INPUT_NO * 2]
+    model.height = [int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 3]), int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 3]), int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 3])]
     model.set_space()
     model.init_ponders()
     existing_adn.append(model.height)
@@ -72,7 +72,7 @@ def hardcode(presets, existing_adn):
     #barrell
     model = preset()
     model.depth = 3
-    model.height = [config.INPUT_NO, config.INPUT_NO * 4, config.INPUT_NO]
+    model.height = [config.INPUT_NO, int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 2]), config.INPUT_NO]
     model.set_space()
     model.init_ponders()
     existing_adn.append(model.height)
@@ -81,7 +81,7 @@ def hardcode(presets, existing_adn):
     #wall
     model = preset()
     model.depth = 1
-    model.height = [config.INPUT_NO * 8]
+    model.height = [int(config.INPUT_NO * config.MULTIP_LIST[len(config.MULTIP_LIST) - 1])]
     model.set_space()
     model.init_ponders()
     existing_adn.append(model.height)

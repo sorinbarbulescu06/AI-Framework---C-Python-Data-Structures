@@ -6,6 +6,9 @@ This is a program that lets you train AI models for various use cases.
 This directory should be imported into your python script.
 
 The way it works:
+Variables:
+in config.py you must put your own data in order to build a model that converges, play a bit with those numbers
+
 calling:
 variable.train(all_input_list, all_output_list, char)
 

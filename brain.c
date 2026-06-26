@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 float alfa = 0.01;
-float learning_rate = 0.01;
+float learning_rate;
 
 float grade(const int OUTPUT_NO, float **values_chart, const float *current_out,
     const char type, const int Depth)
@@ -170,8 +171,10 @@ static inline void forward_pass(const int INPUT_NO, const int OUTPUT_NO, const i
 
 float train_and_test(int INPUT_NO, int OUTPUT_NO, int Depth, int Epoch,
     float *pond_n_bias, float *inp_data, float *out_data, int Tests,
-        int *heights, char type)
+        int *heights, char type, float rate)
 {
+    learning_rate = rate;
+    srand(time(NULL));
     int i,j,k,l;
     int *offset = malloc((Depth + 1) * sizeof(int));
     for (i = 0; i < Depth + 1; ++i) {
@@ -231,13 +234,25 @@ float train_and_test(int INPUT_NO, int OUTPUT_NO, int Depth, int Epoch,
     //err_chart[i][j] = error matrix
     
     //LEARNING PHASE:
+
+    int *indices = malloc(exam * sizeof(int));
+    for (l = 0; l < exam; ++l) {
+        indices[l] = l;
+    }
     for(int t = 0; t < Epoch; ++t) {
-        for (l = 0; l < exam; ++l) {
+        for (l = exam - 1; l > 0; --l) {
+            int j = rand() % (l + 1);
+            int temp = indices[l];
+            indices[l] = indices[j];
+            indices[j] = temp;
+        }
+        for (int step_idx = 0; step_idx < exam; ++step_idx) {
+            int current_img = indices[step_idx];
             //modifying the values throughout forward_pass
             forward_pass(INPUT_NO, OUTPUT_NO, Depth, pond_n_bias,
-                &inp_data[l * INPUT_NO], values_chart, heights, type);
+                &inp_data[current_img * INPUT_NO], values_chart, heights, type);
             backprop(OUTPUT_NO, values_chart, err_chart, type, Depth,
-                &out_data[l * step], heights, offset, pond_n_bias, INPUT_NO, &inp_data[l * INPUT_NO]);
+                &out_data[current_img * step], heights, offset, pond_n_bias, INPUT_NO, &inp_data[current_img * INPUT_NO]);
         }
     }
     //TESTING PHASE:
@@ -254,5 +269,6 @@ float train_and_test(int INPUT_NO, int OUTPUT_NO, int Depth, int Epoch,
     free(err_pool);
     free(err_chart);
     free(offset);
+    free(indices);
     return score;
 }
